@@ -19,6 +19,10 @@ def show():
     passwordEntry.config(show='')
     eyeButton.config(command=hide)
     
+def signup_page():
+    login_window.destroy()
+    import signup
+    
 #gui part
 
 login_window=Tk()
@@ -78,6 +82,6 @@ twitterlabel.place(x=740,y=440)
 signupLabel=Label(login_window,text='Dont have an account?',font=('Open Sans',9,'bold'),fg='firebrick',bg='white')
 signupLabel.place(x=590,y=500)
 
-newaccountButton=Button(login_window,text='Create new one',font=('Open Sans',9,'bold underline'),fg='blue',bg='white',activeforeground='blue',activebackground='firebrick1',cursor='hand2',bd=0)
+newaccountButton=Button(login_window,text='Create new one',font=('Open Sans',9,'bold underline'),fg='blue',bg='white',activeforeground='blue',activebackground='firebrick1',cursor='hand2',bd=0,command=signup_page)
 newaccountButton.place(x=727,y=500)
 login_window.mainloop()
