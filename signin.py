@@ -1,5 +1,7 @@
 from tkinter import *
 from PIL import ImageTk
+from tkinter import messagebox
+import pymysql
 #functionality
 def on_enter(event):
     if usernameEntry.get()=='Username':
@@ -22,6 +24,83 @@ def show():
 def signup_page():
     login_window.destroy()
     import signup
+    
+    
+def login_user():
+    if usernameEntry.get()=='' or passwordEntry.get()=='':
+        messagebox.showerror('Error','All Fields are Required.')
+    else:
+        try:
+            con=pymysql.connect(host='localhost',user='root',password='gungun1404')
+            mycursor=con.cursor()
+        except:
+            messagebox.showerror('Error','Connection is not establishes try again')
+            return
+        query='use userdata'
+        mycursor.execute(query)
+        query='select * from data where username=%s and password=%s'
+        mycursor.execute(query,(usernameEntry.get(),passwordEntry.get()))
+        row=mycursor.fetchone()
+        if row==None:
+            messagebox.showerror('Error','Invalid username or password')
+        else:
+            messagebox.showinfo('Welcome','Login is successful!')
+            
+def forget_pass():
+    def change_password():
+        if userentry.get()=='' or passentry.get()=='' or copassentry.get()=='':
+            messagebox.showerror('Error','All Fields are required',parent=window)
+        elif passentry.get()!=copassentry.get():
+            messagebox.showerror('Error','Password and confirm password mismatch!',parent=window)
+        else:
+            con=pymysql.connect(host='localhost',user='root',password='gungun1404',database='userdata')
+            mycursor=con.cursor()
+            query='select * from data where username=%s'
+            mycursor.execute(query,(userentry.get()))
+            row=mycursor.fetchone()
+            if row==None:
+                messagebox.showerror('Error','Incorrect username',parent=window)
+            else:
+                query='update data set password=%s where username=%s'
+                mycursor.execute(query,(passentry.get(),userentry.get()))
+                con.commit()
+                con.close()
+                messagebox.showinfo('Success','Password is reset, Please login with new password',parent=window)
+                window.destroy()
+                      
+    window=Toplevel()
+    window.title('Change Password')
+    
+    bgpic=ImageTk.PhotoImage(file='background.jpg')
+    
+    bgLabell=Label(window,image=bgpic)
+    bgLabell.grid()
+    
+    heading_label=Label(window,text='Reset Password',font=('arial',18,'bold'),bg='white',fg='magenta2')
+    heading_label.place(x=500,y=60)
+    
+    userlabel=Label(window,text='Username',font=('arial',12,'bold'),bg='white',fg='orchid1')
+    userlabel.place(x=470,y=130)
+    userentry=Entry(window, width=25,fg='magenta2',font=('arial',11,'bold'),bd=0)
+    userentry.place(x=470,y=160)
+    Frame(window,width=250,height=2,bg='orchid1').place(x=470,y=180)
+    
+    passlabel=Label(window,text='New Password',font=('arial',12,'bold'),bg='white',fg='orchid1')
+    passlabel.place(x=470,y=210)
+    passentry=Entry(window, width=25,fg='magenta2',font=('arial',11,'bold'),bd=0)
+    passentry.place(x=470,y=240)
+    Frame(window,width=250,height=2,bg='orchid1').place(x=470,y=260)
+    
+    copasslabel=Label(window,text='Confirm Password',font=('arial',12,'bold'),bg='white',fg='orchid1')
+    copasslabel.place(x=470,y=290)
+    copassentry=Entry(window, width=25,fg='magenta2',font=('arial',11,'bold'),bd=0)
+    copassentry.place(x=470,y=320)
+    Frame(window,width=250,height=2,bg='orchid1').place(x=470,y=340)
+    
+    submitbutton=Button(window,text='Submit',bd=0,bg='magenta2',fg='white',font=('Open Sans',16,'bold'),width=19,cursor='hand2',activebackground='magenta2',activeforeground='white',command=change_password)
+    submitbutton.place(x=470,y=390)
+    
+    window.mainloop()
     
 #gui part
 
@@ -58,10 +137,10 @@ openeye=PhotoImage(file='openeye.png')
 eyeButton=Button(login_window,image=openeye,bd=0,bg='white',activebackground='white',cursor='hand2',command=hide)
 eyeButton.place(x=800,y=255)
 
-forgotButton=Button(login_window,text='Forgot password?',bd=0,bg='white',activebackground='white',cursor='hand2',font=('Microsoft Yahei Ui Light',9,'bold'),fg='firebrick1',activeforeground='firebrick1')
+forgotButton=Button(login_window,text='Forgot password?',bd=0,bg='white',activebackground='white',cursor='hand2',font=('Microsoft Yahei Ui Light',9,'bold'),fg='firebrick1',activeforeground='firebrick1',command=forget_pass)
 forgotButton.place(x=715,y=295)
 
-loginButton=Button(login_window,text='Login',font=('Open Sans',16,'bold'),fg='white',bg='firebrick1',activeforeground='firebrick1',activebackground='firebrick1',cursor='hand2',bd=0,width=19)
+loginButton=Button(login_window,text='Login',font=('Open Sans',16,'bold'),fg='white',bg='firebrick1',activeforeground='firebrick1',activebackground='firebrick1',cursor='hand2',bd=0,width=19,command=login_user)
 loginButton.place(x=578,y=350)
 
 orLabel=Label(login_window,text='-------------- OR --------------',font=('Open Sans',16),fg='firebrick',bg='white')
