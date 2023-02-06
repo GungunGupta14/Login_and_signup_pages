@@ -104,7 +104,7 @@ def login_user():
 
     else:
         try:
-            con=pymysql.connect(host='localhost',user='root',password='12345')
+            con=pymysql.connect(host='localhost',user='root',password='gungun1404')
             mycursor=con.cursor()
         except:
             messagebox.showerror('Error','Connection is not established try again')
