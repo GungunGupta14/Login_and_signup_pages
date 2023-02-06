@@ -2,6 +2,10 @@ from tkinter import *
 from PIL import ImageTk
 from tkinter import messagebox
 import pymysql
+import os
+import random
+import math
+import smtplib
 #functionality
 def on_enter(event):
     if usernameEntry.get()=='Username':
