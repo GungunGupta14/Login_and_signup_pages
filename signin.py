@@ -2,7 +2,7 @@ from tkinter import *
 from tkinter import messagebox
 from PIL import ImageTk
 import pymysql
-import verification as vf
+import otp as vf
 # Functionality Part
 
 def forgot_pass():
