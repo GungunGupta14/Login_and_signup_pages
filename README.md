@@ -1,3 +1,2 @@
 # Login_and_signup_pages
- 
-https://vanya-1314.github.io/Login_and_signup_pages.github.io/
+ Login and signup pages linked together using Python and SQL. With a functionality of generating otp and Email Verification of OTP for regenerating password
